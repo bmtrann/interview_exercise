@@ -109,6 +109,10 @@ describe('MessageData', () => {
   });
 
   describe('delete', () => {
+    it('should be defined', () => {
+      expect(messageData.delete).toBeDefined();
+    });
+    
     it('successfully marks a message as deleted', async () => {
       const conversationId = new ObjectID();
       const message = await messageData.create(
