@@ -12,6 +12,7 @@ export enum Action {
   updateMessage = 'updateMessage',
   deleteMessage = 'deleteMessage',
   resolveMessage = 'resolveMessage',
+  tagMessage = 'tagMessage',
   pinMessage = 'pinMessage',
   createPoll = 'createPoll',
 }

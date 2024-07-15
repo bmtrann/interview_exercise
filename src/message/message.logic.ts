@@ -13,6 +13,7 @@ import {
   ResolveMessageDto,
   ReactionDto,
   PollOptionDto,
+  TagMessageDto,
 } from './models/message.dto';
 import { MessageData } from './message.data';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
@@ -29,6 +30,7 @@ import {
   UnresolveMessageEvent,
   ReactedMessageEvent,
   UnReactedMessageEvent,
+  TagMessageEvent,
 } from '../conversation/conversation-channel.socket';
 import { UserService } from '../user/user.service';
 import { ConversationData } from '../conversation/conversation.data';
@@ -42,7 +44,7 @@ import {
   ContextType,
 } from '../conversation/models/ContextSchema.dto';
 import { extractUniversityIdsFromContext } from '../conversation/extractUniversityIdsFromContext';
-import { ChatMessageModel } from './models/message.model';
+import { ChatMessageModel, Tag } from './models/message.model';
 import {
   MessageGroupedByConversationOutput,
   MessagesFilterInput,
@@ -363,6 +365,44 @@ export class MessageLogic implements IMessageLogic {
     this.conversationChannel.send(
       deleteMessageEvent,
       deleteMessageDto.conversationId.toHexString(),
+    );
+
+    return message;
+  }
+
+  async updateTags(
+    tagMessageDto: TagMessageDto,
+    tags: Tag[],
+    authenticatedUser?: IAuthenticatedUser,
+  ): Promise<ChatMessage> {
+    if (!authenticatedUser) {
+      throw new ForbiddenError('User is not authenticated');
+    }
+
+    if (
+      !(await this.permissions.messagePermissions({
+        user: authenticatedUser,
+        messageId: String(tagMessageDto.messageId),
+        action: Action.tagMessage,
+      }))
+    ) {
+      throw new ForbiddenError(
+        `User is not authorised to tag this message`,
+      );
+    }
+
+    const message = await this.messageData.updateTags(
+      tagMessageDto.messageId,
+      tags,
+    );
+
+    const tagMessageEvent = new TagMessageEvent({
+      messageId: message.id
+    });
+
+    this.conversationChannel.send(
+      tagMessageEvent,
+      tagMessageDto.conversationId.toHexString(),
     );
 
     return message;
