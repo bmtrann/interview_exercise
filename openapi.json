@@ -680,6 +680,7 @@
                             "updateMessage",
                             "deleteMessage",
                             "resolveMessage",
+                            "tagMessage",
                             "pinMessage",
                             "createPoll"
                         ],
@@ -975,6 +976,12 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Reaction"
+                        }
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
                         }
                     },
                     "isSenderBlocked": {

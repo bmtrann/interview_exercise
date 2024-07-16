@@ -29,12 +29,13 @@ type Reaction {
   userIds: [String!]!
 }
 
-type ChatConversation {
-  id: ID!
-  unreadMessageCount: Int
-  lastMessage: ChatMessage
-  pinnedMessages: [ChatMessage!]!
-  pinnedMessagesCount: Int!
+type Tag {
+  id: String!
+  tagType: TagType!
+}
+
+enum TagType {
+  subTopic
 }
 
 type UserField {
@@ -106,6 +107,7 @@ type ChatMessage {
   likesCount: Int!
   richContent: RichMessageContent
   reactions: [Reaction!]
+  tags: [Tag!]
   isSenderBlocked: Boolean
 }
 
@@ -117,6 +119,14 @@ scalar DateTime
 type PaginatedChatMessages {
   messages: [ChatMessage!]!
   hasMore: Boolean!
+}
+
+type ChatConversation {
+  id: ID!
+  unreadMessageCount: Int
+  lastMessage: ChatMessage
+  pinnedMessages: [ChatMessage!]!
+  pinnedMessagesCount: Int!
 }
 
 type LastRead {
@@ -152,6 +162,7 @@ type Mutation {
   unpinMessageInConversation(unpinMessageDTO: unpinMessageDTO!): ChatConversation!
   sendConversationMessage(messageDto: MessageDto!): ChatMessage!
   deleteConversationMessage(deleteMessageDto: DeleteMessageDto!): ChatMessage!
+  tagConversationMessage(tagMessageDto: TagMessageDto!): ChatMessage!
   resolveConversationMessage(resolveMessageDto: ResolveMessageDto!): ChatMessage!
   unresolveConversationMessage(resolveMessageDto: ResolveMessageDto!): ChatMessage!
   likeConversationMessage(likeMessageDto: LikeMessageDto!): ChatMessage!
@@ -228,6 +239,13 @@ input PollOptionDto {
 input DeleteMessageDto {
   conversationId: ObjectId!
   messageId: ObjectId!
+}
+
+input TagMessageDto {
+  tagId: String!
+  tagType: TagType!
+  messageId: ObjectId!
+  conversationId: ObjectId!
 }
 
 input ResolveMessageDto {

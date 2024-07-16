@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectID } from 'mongodb';
-import { AttachmentType, GifType } from './message.dto';
+import { AttachmentType, GifType, TagType } from './message.dto';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @Schema()
@@ -113,10 +113,6 @@ export class Reaction {
   @Prop({ type: [String], default: [] })
   @Field(() => [String], { nullable: false })
   userIds: string[];
-}
-
-export enum TagType {
-  subTopic = 'subTopic',
 }
 
 @Schema()

@@ -179,10 +179,21 @@ export class ReactionDto {
   conversationId: ObjectID;
 }
 
+export enum TagType {
+  subTopic = 'subTopic',
+}
+
+registerEnumType(TagType, {
+  name: 'TagType',
+});
+
 @InputType()
 export class TagMessageDto {
-  @Field(() => Tag)
-  tag: Tag;
+  @Field(() => String)
+  tagId: String;
+
+  @Field(() => TagType)
+  tagType: TagType;
 
   @Field(() => ObjectID)
   messageId: ObjectID;
