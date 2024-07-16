@@ -166,12 +166,8 @@ export class ChatMessageModel {
   })
   reactions?: Reaction[];
 
-  @Prop({
-    type: [{ id: { type: String }, type: { type: String } }],
-    required: false,
-    default: [],
-  })
-  tags?: Tag[];
+  @Prop()
+  tags?: Array<Tag>;
 
   /**
    * All the properties below are virtual properties

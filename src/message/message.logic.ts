@@ -372,7 +372,6 @@ export class MessageLogic implements IMessageLogic {
 
   async updateTags(
     tagMessageDto: TagMessageDto,
-    tags: Tag[],
     authenticatedUser?: IAuthenticatedUser,
   ): Promise<ChatMessage> {
     if (!authenticatedUser) {
@@ -393,7 +392,8 @@ export class MessageLogic implements IMessageLogic {
 
     const message = await this.messageData.updateTags(
       tagMessageDto.messageId,
-      tags,
+      tagMessageDto.tagId,
+      tagMessageDto.tagType
     );
 
     const tagMessageEvent = new TagMessageEvent({

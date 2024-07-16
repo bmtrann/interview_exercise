@@ -8,7 +8,7 @@ import {
   Tag,
 } from './models/message.model';
 import { ChatMessage, PaginatedChatMessages } from './models/message.entity';
-import { MessageDto, GetMessageDto } from './models/message.dto';
+import { MessageDto, GetMessageDto, TagType } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { createRichContent } from './utils/message.helper';
 import { MessageGroupedByConversationOutput } from '../conversation/models/messagesFilterInput';
@@ -372,11 +372,14 @@ export class MessageData {
 
   async updateTags(
     messageId: ObjectID,
-    tags: Tag[],
+    tagId: String,
+    tagType: TagType
   ): Promise<ChatMessage> {
     const result = await this.chatMessageModel.findOneAndUpdate(
       { _id: messageId },
-      { $set: { tags } },
+      {
+        $addToSet: { tags: { id: tagId, tagType: tagType } },
+      },
       { 
         new: true,
         returnOriginal: false,

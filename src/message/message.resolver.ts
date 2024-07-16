@@ -106,7 +106,7 @@ export class MessageResolver {
     @Args('tagMessageDto') tagMessageDto: TagMessageDto,
     @AuthenticatedUser() authenticatedUser: IAuthenticatedUser,
   ): Promise<ChatMessage> {
-    return await this.messageLogic.delete(tagMessageDto, authenticatedUser);
+    return await this.messageLogic.updateTags(tagMessageDto, authenticatedUser);
   }
 
   @Mutation(() => ChatMessage)
